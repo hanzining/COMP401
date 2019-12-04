@@ -2,14 +2,13 @@ package controller;
 
 import model.CellLife;
 
-public class Process 
+public class Controller 
 {
 	protected CellLife world;
-	public Process(){
+	public Controller(){
 		world=new CellLife(10,10);
 	}
-	public Process(int row,int col)
-	{
+	public Controller(int row,int col){
 		world=new CellLife(row,col);
 	}
 	
@@ -18,20 +17,16 @@ public class Process
 	
 		for(int i=0;i<world.getWorldRow();i++){
 			for(int j=0;j<world.getWorldCol();j++){
-		
 				int cellNum=world.getPericyteCellNum(i, j);
-				if(world.getCellStatus(i, j)!=cellSavePrinciple(world.getCellStatus(i, j),cellNum))
-				{
+				if(world.getCellStatus(i, j)!=cellSavePrinciple(world.getCellStatus(i, j),cellNum)){
 					world.setChangeFlag(i, j);
 				}				
 			}
 		}
 
 		for(int i=0;i<world.getWorldRow();i++){
-			for(int j=0;j<world.getWorldCol();j++)
-			{
-				if(world.getChangeStatus(i, j))
-				{
+			for(int j=0;j<world.getWorldCol();j++){
+				if(world.getChangeStatus(i, j)){
 					world.changeCellStatus(i, j);
 					world.canelChangeFlag(i, j);
 				}
@@ -40,22 +35,17 @@ public class Process
 	}
 	
 	private boolean cellSavePrinciple(boolean curStatus,int surCellNumber){
-		if(surCellNumber==3)
-		{
+		if(surCellNumber==3){
 			return true;
 		}
-		else if(surCellNumber==2)
-		{
+		else if(surCellNumber==2){
 			return curStatus;
-		}
-		else
-		{
+		}else{
 			return false;
 		}
 	}
 
-	public boolean changeCellStatus(int row,int col)
-	{
+	public boolean changeCellStatus(int row,int col){
 		return world.changeCellStatus(row, col);
 	}
 	
@@ -69,16 +59,11 @@ public class Process
 		
 		int[][] cellSaveRect=new int[width][length];
 		
-		for(int i=0;i<width;i++)
-		{
-			for(int j=0;j<length;j++)
-			{
-				if(world.getCellStatus(i, j))
-				{
+		for(int i=0;i<width;i++){
+			for(int j=0;j<length;j++){
+				if(world.getCellStatus(i, j)){
 					cellSaveRect[i][j]=1;
-				}
-				else
-				{
+				}else{
 					cellSaveRect[i][j]=0;
 				}
 			}

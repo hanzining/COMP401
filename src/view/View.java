@@ -16,14 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.Toolkit;
-import controller.Process;
+import controller.Controller;
 
-public class Frame{
+public class View{
 	JFrame gameFrame;
 	
 	JPanel operatePanel;
 	JPanel viewPanel;
-	Process gameControl;
+	Controller gameControl;
 
 	boolean isRunning=false;
 	int multipyCycle=1;
@@ -44,11 +44,11 @@ public class Frame{
 	
 	public static void main(String[] args)
 	{
-		new Frame();
+		new View();
 	}
 	
-	public Frame(){
-		gameFrame=new JFrame("Conway's game of life");
+	public View(){
+		gameFrame=new JFrame("Conway's Game of Life");
 		gameFrame.setResizable(false);
 		
 	
@@ -58,16 +58,12 @@ public class Frame{
 		gameFrame.setBounds((screnSize.width-width)/2, (screnSize.height-height)/2, width, height);
 		gameFrame.setLayout(null);
 
-		gameControl=new Process(row,col);
-		
+		gameControl=new Controller(row,col);
 		cells=gameControl.getAllCellStatus();
-
 		operatePanel=getOperatePanel();
 		viewPanel=getViewPanel();
-		
 		gameFrame.add(viewPanel);
 		gameFrame.add(operatePanel);
-
 		gameFrame.setVisible(true);
 		gameFrame.addMouseListener(new ClickMonitor());
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,9 +74,9 @@ public class Frame{
 	{
 		JPanel operatePanel=new JPanel();
 
-		operatePanel.setBounds(800, 0, 360, 800);
+		operatePanel.setBounds(850, 0, 400, 850);
 
-		operatePanel.setLayout(new GridLayout(10,10));
+		operatePanel.setLayout(new GridLayout(10,2));
 	
 		JPanel mapWidthPanel=new JPanel();
 		JLabel mapWidthLabel=new JLabel("Width");
@@ -113,8 +109,7 @@ public class Frame{
 		multipyCycPanel.add(multipyCycField);
 		
 		changeButton=new JButton("Reset");
-		changeButton.addActionListener(new ActionListener()
-				{
+		changeButton.addActionListener(new ActionListener(){
 				@Override
 					public void actionPerformed(ActionEvent e) {
 					clearPaint(gameFrame.getGraphics());
@@ -123,17 +118,14 @@ public class Frame{
 					multipyCycle=Integer.parseInt(multipyCycField.getText());
 					multipyCount=0;
 					multipyCountField.setText(String.valueOf(multipyCount));
-					gameControl=new Process(row,col);
-					
-	
+					gameControl=new Controller(row,col);
 					paintGirdLines(gameFrame.getGraphics());
 					
 					}
 				});
 		
 		reStartButton=new JButton("Set Random");
-		reStartButton.addActionListener(new ActionListener() 
-		{
+		reStartButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			
@@ -147,8 +139,7 @@ public class Frame{
 		});
 		
 		startButton=new JButton("Start");
-		startButton.addActionListener(new ActionListener() 
-		{
+		startButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -159,8 +150,7 @@ public class Frame{
 		});
 
 		JButton stopButton=new JButton("Stop");
-		stopButton.addActionListener(new ActionListener()
-				{
+		stopButton.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -187,108 +177,86 @@ public class Frame{
 		return operatePanel;
 	}
 
-	private JPanel getViewPanel()
-	{
+	private JPanel getViewPanel(){
 		JPanel viewPanel=new JPanel();
-		
-		viewPanel.setBounds(0, 0, 800, 800);
-		
+		viewPanel.setBounds(0, 0, 850, 850);
 		return viewPanel;
 	}
 
-	public void clearPaint(Graphics g)
-	{
+	public void clearPaint(Graphics g){
 		g.setColor(new Color(238,238,238));
-		for(int i=0;i<=row;i++)
-		{
-			for(int j=0;j<=col;j++)
-			{
-			
+		for(int i=0;i<=row;i++){
+			for(int j=0;j<=col;j++){
 					g.fillRect(j*sideLength+adjustLength, i*sideLength+adjustLength,sideLength,sideLength);
-				
 			}
 		}
 	}
 
-	public void paintGirdLines(Graphics g)
-	{
+	public void paintGirdLines(Graphics g){
 		g.setColor(new Color(0,0,0));
-		for(int i=0;i<=row;i++)
-		{
+		for(int i=0;i<=row;i++){
 			g.drawLine(adjustLength, i*sideLength+adjustLength, col*sideLength+adjustLength,i*sideLength+adjustLength);
 		}
 	
-		for(int i=0;i<=col;i++)
-		{
+		for(int i=0;i<=col;i++){
 			g.drawLine(i*sideLength+adjustLength,adjustLength,i*sideLength+adjustLength,row*sideLength+adjustLength);
 		}
 	}
 	
-	public void paintCells(Graphics g)
-	{
+	public void paintCells(Graphics g){
 		g.setColor(new Color(0,0,0));
 	
-		for(int i=0;i<row;i++)
-		{
-			for(int j=0;j<col;j++)
-			{
-				if(1==cells[i][j])
-				{
+		for(int i=0;i<row;i++){
+			for(int j=0;j<col;j++){
+				if(1==cells[i][j]){
 					g.fillRect(j*sideLength+adjustLength, i*sideLength+adjustLength, sideLength, sideLength);
 				}
 			}
 		}
 	}
 
-	public void createCell(Graphics g,int row,int col)
-	{
+	public void createCell(Graphics g,int row,int col){
 		g.setColor(new Color(0,0,0));
-		
 		g.fillRect(col*sideLength+adjustLength, row*sideLength+adjustLength, sideLength, sideLength);
 	}
 
-	public void killCell(Graphics g,int row,int col)
-	{
+	public void killCell(Graphics g,int row,int col){
 		g.setColor(new Color(238,238,238));
 		g.fillRect(col*sideLength+adjustLength, row*sideLength+adjustLength, sideLength, sideLength);
 		clearPaint(g);
 	}
-class MultipyThread extends Thread
-{
+	
+class MultipyThread extends Thread{
 	@Override
-	public void run()
-	{
+	public void run(){
 		isRunning=true;	
 		changeButton.setEnabled(false);
 		reStartButton.setEnabled(false);
 		startButton.setEnabled(false);
 		
 
-		while(isRunning)
-		{
-			gameControl.cellMultiply();//ϸ������ı�һ��
-			cells=gameControl.getAllCellStatus();//��ȡ�ı��ϸ����������
-			
-			clearPaint(gameFrame.getGraphics());//���ԭͼ
-			paintGirdLines(gameFrame.getGraphics());//������ͼ
-			paintCells(gameFrame.getGraphics());//����ϸ��
-			multipyCount++;//��ֳһ�Σ����ڼ�һ
-			multipyCountField.setText(String.valueOf(multipyCount));//���õ�ǰ����
+		while(isRunning){
+			gameControl.cellMultiply();
+			cells=gameControl.getAllCellStatus();
+			clearPaint(gameFrame.getGraphics());
+			paintGirdLines(gameFrame.getGraphics());
+			paintCells(gameFrame.getGraphics());
+			multipyCount++;
+			multipyCountField.setText(String.valueOf(multipyCount));
 			
 			try {
 				Thread.sleep(multipyCycle*1000);
 			} catch (InterruptedException e1) {
-				
 				e1.printStackTrace();
 			}
 		}
 	}
 }
+
 class ClickMonitor implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int point_x=e.getX();
 		int point_y=e.getY();
 		
@@ -298,12 +266,11 @@ class ClickMonitor implements MouseListener {
 		int row=(point_y-adjustLength)/sideLength;
 		
 		boolean beforeStatus=gameControl.changeCellStatus(row, col);
-		if(beforeStatus)
-		{
+		if(beforeStatus){
 			killCell(gameFrame.getGraphics(),row,col);
+		}else {
+			createCell(gameFrame.getGraphics(),row,col);
 		}
-		else
-			createCell(gameFrame.getGraphics(),row,col);	
 	}
 
 	@Override

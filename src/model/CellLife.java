@@ -15,8 +15,8 @@ public class CellLife
 			for(int j=0;j<worldCol;j++)
 			{
 				cells[i][j]=new Cell();
-			}//
-		randomCellsStatus();
+			}
+		//randomCellsStatus();
 	}
 
 	public int getWorldRow()
